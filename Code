@@ -1,0 +1,121 @@
+/*
+    Input: Choice
+    If 'Choice' isn't one of the options, then
+        tell the user to reinput their choice using given letters
+    ENDIF
+    REPEAT 
+        Input: Choice
+        IF 'E' is pressed THEN 
+            Input: Message, Shift
+            Compute: Caesar Cipher with Shift to message
+            Out: Caesar Cipher
+            REPEAT 
+                Input: Choice
+        ELSE IF 'D' is pressed THEN
+            Input: Message, Shift
+            Compute: Caesar Cipher with Shift to Message
+            Out: Caesar Cipher
+            REPEAT
+                Input: Choice
+    UNTIL 'Q' has been pressed
+    
+*/
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+// Function prototypes
+void displayBoard();
+string encryptMessage(string& message, int shift);
+string decryptMessage(string& message, int shift);
+
+int main()
+{
+    char choice;
+
+    while (true)
+    {
+        displayBoard();
+        cout << "Enter your choice: ";
+        cin >> choice;
+        choice = toupper(choice); //To make menu choice clearer
+
+        string message;
+        int shift = 0;
+
+        //To help with menu choices 
+        switch (choice)
+        {
+            case 'E':
+                cout << "Enter message that you want to encrypt:" << endl;
+                cin.ignore(); // Clear newline from the buffer
+                getline(cin, message);
+
+                cout << "Enter the specified shift in characters: ";
+                cin >> shift;
+                cout << "Encrypted Message: " << encryptMessage(message, shift) << endl;
+                break;
+
+            case 'D':
+                cout << "Enter message that you want to decrypt:" << endl;
+                cin.ignore(); // Clear newline from the buffer
+                getline(cin, message);
+
+                cout << "Enter the specified shift in characters: ";
+                cin >> shift;
+                cout << "Decrypted Message: " << decryptMessage(message, shift) << endl;
+                break;
+
+            case 'Q':
+                cout << "Thank you for using my program!" << endl;
+                return 0;
+
+            default:
+                cout << "Invalid request. Please input a valid request" << endl;
+                break;
+        }
+    }
+
+    return 0;
+}
+
+void displayBoard()
+{
+    cout << "----------------------------" << endl;
+    cout << " Encryption/Decryption Tool" << endl;
+    cout << "----------------------------" << endl;
+    cout << "    Type 'E' to Encrypt     " << endl;
+    cout << "    Type 'D' to Decrypt     " << endl;
+    cout << "    Type 'Q' to Quit        " << endl;
+    cout << "----------------------------" << endl;
+}
+
+string encryptMessage(string& message, int shift)
+{
+    string result;
+
+    for (char ch : message)
+    {
+        if (isupper(ch))
+        {
+            result += char(int(ch + shift - 'A') % 26 + 'A');
+        }
+        else if (islower(ch))
+        {
+            result += char(int(ch + shift - 'a') % 26 + 'a');
+        }
+        else
+        {
+            result += ch; // Non-alphabetic characters are added unchanged
+        }
+    }
+
+    return result;
+}
+
+string decryptMessage(string& message, int shift)
+{
+    return encryptMessage(message, 26 - (shift % 26)); // Decrypting is simply shifting back
+}
